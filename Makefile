@@ -7,6 +7,6 @@ clean:
 	rm -rf dist/ build/ .pytest_cache/
 
 format:
-	isort src/yrouter_websockets tests examples
-	black src/yrouter_websockets tests examples
-	flake8 src/yrouter_websockets tests examples
+	isort src/yrouter_websockets tests
+	black src/yrouter_websockets tests
+	flake8 src/yrouter_websockets tests

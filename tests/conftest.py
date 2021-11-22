@@ -1,7 +1,7 @@
 import pytest
 import websockets
 
-from src.yrouter_websockets import router_protocol
+from yrouter_websockets import router
 
 from .routes import routes
 
@@ -13,7 +13,5 @@ async def echo():
 @pytest.fixture
 @pytest.mark.asyncio
 async def server():
-    async with websockets.serve(
-        echo, "localhost", 8765, create_protocol=router_protocol(routes)
-    ) as s:
+    async with websockets.serve(router(routes), "localhost", 8765) as s:
         yield s

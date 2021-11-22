@@ -1,12 +1,10 @@
+import re
+
 import pytest
 import websockets
-from websockets.exceptions import InvalidStatusCode
+from websockets.exceptions import ConnectionClosedOK
 
 uri = "ws://127.0.0.1:8765"
-
-
-async def echo(websocket):
-    pass
 
 
 @pytest.mark.asyncio
@@ -24,7 +22,11 @@ async def test_username(server):
 
 @pytest.mark.asyncio
 async def test_404(server):
-    expected = "server rejected WebSocket connection: HTTP 404"
-    with pytest.raises(InvalidStatusCode, match=expected):
-        async with websockets.connect(f"{uri}/405/"):
-            pass
+    expected = (
+        "received 1001 (going away) Not Found.; "
+        "then sent 1001 (going away) Not Found."
+    )
+
+    async with websockets.connect(f"{uri}/404/") as ws:
+        with pytest.raises(ConnectionClosedOK, match=re.escape(expected)):
+            await ws.recv()
